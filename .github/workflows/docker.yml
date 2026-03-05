@@ -20,4 +20,4 @@ jobs:
     with:
       image: "dockette/coder"
       tag: "fx"
-      context: "coder/fx"
+      context: "fx"
