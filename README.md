@@ -1,13 +1,8 @@
 <h1 align=center>Dockette / Coder</h1>
 
 <p align=center>
-   Docker base images for <a href="https://coder.com">Coder</a> workspaces. Extends the official Coder Node image with PHP, Composer, Deno, Bun, GitHub CLI, and dev tooling.
-</p>
-
-<p align=center>
-  <a href="https://hub.docker.com/r/dockette/coder/"><img src="https://badgen.net/docker/pulls/dockette/coder"></a>
-  <a href="https://bit.ly/ctteg"><img src="https://badgen.net/badge/support/gitter/cyan"></a>
-  <a href="https://github.com/sponsors/f3l1x"><img src="https://badgen.net/badge/sponsor/donations/F96854"></a>
+   Docker base images for <a href="https://coder.com">Coder</a> workspaces. 
+   Extends the official Coder image with AI tooling.
 </p>
 
 -----

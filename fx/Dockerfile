@@ -28,25 +28,22 @@ RUN curl -fsSL https://deno.land/install.sh | sh
 ENV BUN_INSTALL=/usr/local
 RUN curl -fsSL https://bun.sh/install | bash
 
-# Claude CLI (install script may use $HOME; we copy binary to /usr/local/bin)
+# Claude CLI
 RUN curl -fsSL https://claude.ai/install.sh | bash || true && \
     if [ -f /root/.local/bin/claude ]; then cp /root/.local/bin/claude /usr/local/bin/claude && chmod +x /usr/local/bin/claude; fi && \
     if [ -f /root/bin/claude ]; then cp /root/bin/claude /usr/local/bin/claude && chmod +x /usr/local/bin/claude; fi
 
-# OpenCode (same: install then ensure binary in PATH)
+# OpenCode CLI
 RUN curl -fsSL https://opencode.ai/install | bash || true && \
-    if [ -f /root/.local/bin/opencode ]; then cp /root/.local/bin/opencode /usr/local/bin/opencode && chmod +x /usr/local/bin/opencode; fi && \
-    if [ -f /root/bin/opencode ]; then cp /root/bin/opencode /usr/local/bin/opencode && chmod +x /usr/local/bin/opencode; fi
+    if [ -f /root/.opencode/bin/opencode ]; then cp /root/.opencode/bin/opencode /usr/local/bin/opencode && chmod +x /usr/local/bin/opencode; fi
 
-# Cursor Agent CLI (https://cursor.com/docs/cli)
-RUN curl -fsSL https://cursor.com/install | bash || true && \
-    if [ -f /root/.local/bin/cursor-agent ]; then cp /root/.local/bin/cursor-agent /usr/local/bin/cursor-agent && chmod +x /usr/local/bin/cursor-agent; fi && \
-    if [ -f /root/bin/cursor-agent ]; then cp /root/bin/cursor-agent /usr/local/bin/cursor-agent && chmod +x /usr/local/bin/cursor-agent; fi
+# Codex
+RUN npm install -g @openai/codex
 
-# npm global tools
-RUN npm install -g @openai/codex @github/copilot
+# Copilot
+RUN npm install -g @github/copilot
 
-# PATH and env for all users (Deno, Bun) — append to bash profile
+# PATHS
 RUN echo '' >> /etc/profile && \
     echo '# coder-env: Deno, Bun' >> /etc/profile && \
     echo 'export DENO_INSTALL="${DENO_INSTALL:-/usr/local}"' >> /etc/profile && \
@@ -55,4 +52,5 @@ RUN echo '' >> /etc/profile && \
     echo '[ -d "$BUN_INSTALL/bin" ] && export PATH="$BUN_INSTALL/bin:$PATH"' >> /etc/profile
 
 WORKDIR /home/coder
+
 USER coder
