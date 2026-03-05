@@ -1,0 +1,23 @@
+name: "Docker"
+
+on:
+  workflow_dispatch:
+
+  push:
+    branches: ["master"]
+
+  schedule:
+    - cron: "0 8 * * 1"
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: "Build"
+    uses: dockette/.github/.github/workflows/docker.yml@master
+    secrets: inherit
+    with:
+      image: "dockette/coder"
+      tag: "fx"
+      context: "coder/fx"
