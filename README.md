@@ -9,18 +9,13 @@
 
 ## Usage
 
-```
-docker run -it dockette/coder:fx
-```
-
-**Base image**
-
-```Dockerfile
-FROM dockette/coder:fx
-
-USER root
-# optional extra layers
-USER coder
+```diff
+resource "docker_container" "workspace" {
+  count = data.coder_workspace.me.start_count
+  -image = "codercom/enterprise-base:ubuntu"
+  +image = "dockette/coder:fx"
+  ...
+}
 ```
 
 ## Documentation
