@@ -8,7 +8,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update -y && \
     add-apt-repository -y ppa:ondrej/php && \
     apt-get update -y && \
     apt-get install -y --no-install-recommends \
-        php8.5-cli php8.5-common php8.5-curl php8.5-intl php8.5-mbstring php8.5-readline php8.5-xml php8.5-zip && \
+        php8.5-cli php8.5-common php8.5-curl php8.5-gd php8.5-intl php8.5-mbstring php8.5-phpdbg php8.5-readline php8.5-xml php8.5-zip && \
     mkdir -p -m 755 /etc/apt/keyrings && \
     (out=$(mktemp) && wget -nv -O"$out" https://cli.github.com/packages/githubcli-archive-keyring.gpg && \
      cat "$out" > /etc/apt/keyrings/githubcli-archive-keyring.gpg && chmod go+r /etc/apt/keyrings/githubcli-archive-keyring.gpg) && \
