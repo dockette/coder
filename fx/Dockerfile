@@ -4,7 +4,7 @@ USER root
 
 # Apt: mc, nano, PHP 8.5 (Ondrej), GitHub CLI
 RUN DEBIAN_FRONTEND=noninteractive apt-get update -y && \
-    apt-get install -y --no-install-recommends mc nano software-properties-common ca-certificates && \
+    apt-get install -y --no-install-recommends mc nano tmux software-properties-common ca-certificates && \
     add-apt-repository -y ppa:ondrej/php && \
     apt-get update -y && \
     apt-get install -y --no-install-recommends \
