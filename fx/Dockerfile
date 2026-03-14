@@ -20,6 +20,9 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update -y && \
     apt-get install -y --no-install-recommends gh && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
+# PHP: custom config
+RUN echo 'variables_order = "EGPCS"' > /etc/php/8.5/cli/conf.d/99-coder.ini
+
 # Composer (system-wide)
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
