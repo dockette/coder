@@ -2,6 +2,10 @@ FROM codercom/example-node:ubuntu
 
 USER root
 
+# npm: user-local global directory
+RUN mkdir -p ~/.npm-global && \
+    npm config set prefix ~/.npm-global
+
 # Apt: mc, nano, PHP 8.5 (Ondrej), GitHub CLI
 RUN DEBIAN_FRONTEND=noninteractive apt-get update -y && \
     apt-get install -y --no-install-recommends mc nano tmux software-properties-common ca-certificates && \
@@ -48,6 +52,20 @@ RUN npm install -g @openai/codex
 
 # Copilot
 RUN npm install -g @github/copilot
+
+# Chrome dependencies
+RUN DEBIAN_FRONTEND=noninteractive apt-get update -y && \
+    apt-get install -y --no-install-recommends \
+        libnspr4 libnss3 libatk-bridge2.0-0 libdrm2 libxkbcommon0 libatspi2.0-0 \
+        libcups2t64 libxshmfence1 libgbm1 libpango-1.0-0 libpangocairo-1.0-0 \
+        libasound2t64 libx11-xcb1 libxcomposite1 libxdamage1 libxfixes3 libxrandr2 \
+        libxi6 libgtk-3-0t64 libcairo2 libcairo-gobject2 libgdk-pixbuf-2.0-0 \
+        libatk1.0-0 libxrender1 libfontconfig1 libdbus-1-3 libxcb1 libxext6 libx11-6 && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Agent Browser: install + download Chrome
+RUN npm install -g agent-browser && \
+    agent-browser install
 
 # PATHS
 RUN echo '' >> /etc/profile && \
