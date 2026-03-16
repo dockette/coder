@@ -53,7 +53,7 @@ RUN npm install -g @openai/codex
 # Copilot
 RUN npm install -g @github/copilot
 
-# Agent Browser: Chrome system dependencies
+# Chrome dependencies
 RUN DEBIAN_FRONTEND=noninteractive apt-get update -y && \
     apt-get install -y --no-install-recommends \
         libnspr4 libnss3 libatk-bridge2.0-0 libdrm2 libxkbcommon0 libatspi2.0-0 \
