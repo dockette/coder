@@ -59,11 +59,13 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update -y && \
         libatk1.0-0 libxrender1 libfontconfig1 libdbus-1-3 libxcb1 libxext6 libx11-6 && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Agent Browser: npm global dir + install + download Chrome
-RUN mkdir -p ~/.npm-global && \
-    npm config set prefix ~/.npm-global && \
-    npm install -g agent-browser && \
+# Agent Browser: install + download Chrome
+RUN npm install -g agent-browser && \
     agent-browser install
+
+# npm: user-local global directory
+RUN mkdir -p ~/.npm-global && \
+    npm config set prefix ~/.npm-global
 
 # PATHS
 RUN echo '' >> /etc/profile && \
