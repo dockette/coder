@@ -2,6 +2,10 @@ FROM codercom/example-node:ubuntu
 
 USER root
 
+# npm: user-local global directory
+RUN mkdir -p ~/.npm-global && \
+    npm config set prefix ~/.npm-global
+
 # Apt: mc, nano, PHP 8.5 (Ondrej), GitHub CLI
 RUN DEBIAN_FRONTEND=noninteractive apt-get update -y && \
     apt-get install -y --no-install-recommends mc nano tmux software-properties-common ca-certificates && \
@@ -62,10 +66,6 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update -y && \
 # Agent Browser: install + download Chrome
 RUN npm install -g agent-browser && \
     agent-browser install
-
-# npm: user-local global directory
-RUN mkdir -p ~/.npm-global && \
-    npm config set prefix ~/.npm-global
 
 # PATHS
 RUN echo '' >> /etc/profile && \
