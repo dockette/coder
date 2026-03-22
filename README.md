@@ -1,13 +1,19 @@
 <h1 align=center>Dockette / Coder</h1>
 
 <p align=center>
-   Docker base images for <a href="https://coder.com">Coder</a> workspaces. 
-   Extends the official Coder image with AI tooling.
+   Docker images for <a href="https://coder.com">Coder</a> workspaces. Built on Coder’s enterprise base
+   and extended with PHP, Node tooling, and a few AI CLIs we use day to day.
 </p>
 
 -----
 
+## Motivation
+
+`dockette/coder` is meant to drop into a Coder Terraform template so new workspaces already have a sane dev stack.
+
 ## Usage
+
+Point your workspace image at this tag (or build from `fx/Dockerfile` if you fork):
 
 ```diff
 resource "docker_container" "workspace" {
@@ -18,28 +24,30 @@ resource "docker_container" "workspace" {
 }
 ```
 
-## Documentation
+## Images
 
-### From base (codercom/example-node:ubuntu)
+### `dockette/coder:fx`
 
-Ubuntu Noble, Node.js LTS, Yarn, Docker, git, curl, htop, jq, vim, wget, sudo, `coder` user.
+So you’re replacing the plain enterprise base with the same foundation plus our layers: Node/npm, PHP 8.5, Composer, Deno, Bun, browser automation, and the CLIs listed below.
 
-### Added in fx
+**Base:** `codercom/enterprise-base:ubuntu` (Ubuntu, `coder` user, usual Coder expectations).
 
-mc, nano, PHP 8.5 (cli, curl, intl, mbstring, readline, xml, zip), Composer, GitHub CLI (gh), Deno, Bun, Claude CLI, OpenCode, and npm globals: vibe-kanban, @openai/codex, @github/copilot.
-
-### Coder template
-
-Use this image in your Terraform template so workspaces start with all tools preinstalled: set `docker_image` / `docker_container` to `dockette/coder:fx`, or use a Dockerfile that starts with `FROM dockette/coder:fx`. Your `startup_script` can be reduced to first-run init (e.g. copy `/etc/skel` into home, touch `~/.init_done`); no need to install packages or run install scripts.
-
-### PATH
-
-Deno and Bun are installed under `/usr/local`. Their env and `bin` dirs are appended to `/etc/profile` so all login shells get `DENO_INSTALL`, `BUN_INSTALL`, and PATH.
+- **Node.js** (includes **npm**) via Nodesource (**Node 22** in this image).
+- **Shell:** `mc`, `nano`, `tmux`.
+- **PHP 8.5** (Ondrej PPA): CLI + common extensions (curl, intl, mbstring, mysql, pgsql, redis, xml, zip, imagick, etc.).
+- **Composer**, **GitHub CLI (`gh`)**.
+- **Deno** and **Bun** under `/usr/local`. `/etc/profile` sets `DENO_INSTALL`, `BUN_INSTALL`, and PATH for login shells.
+- **Claude** and **OpenCode** installers (best-effort copy to `/usr/local/bin` when present).
+- **npm globals:** `@openai/codex`, `@github/copilot`.
+- **Chrome libraries** plus **agent-browser** (installs its Chromium).
 
 ## Development
 
-See [how to contribute](https://contributte.org/contributing.html) to this package.
+```bash
+make build
+make test
+```
 
 -----
 
-Consider to [support](https://github.com/sponsors/f3l1x) **f3l1x**. Also thank you for using this package.
+Consider supporting [f3l1x on GitHub Sponsors](https://github.com/sponsors/f3l1x) if you rely on this. Thanks for using it.
