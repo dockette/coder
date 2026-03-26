@@ -68,3 +68,5 @@ RUN apt update && apt dist-upgrade -y && \
 WORKDIR /home/coder
 
 USER coder
+
+RUN agent-browser install
