@@ -50,7 +50,7 @@ RUN apt update && apt dist-upgrade -y && \
         libxi6 libgtk-3-0t64 libcairo2 libcairo-gobject2 libgdk-pixbuf-2.0-0 \
         libatk1.0-0 libxrender1 libfontconfig1 libdbus-1-3 libxcb1 libxext6 libx11-6 && \
     npm install -g agent-browser && \
-    agent-browser install && \
+    runuser -u coder -- agent-browser install && \
     # PROFILE (DENO, BUN PATH) ##################################################
     echo '' >> /etc/profile && \
     echo '# Deno, Bun' >> /etc/profile && \
