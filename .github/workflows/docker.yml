@@ -10,7 +10,6 @@ on:
 
 permissions:
   contents: read
-  actions: write
 
 jobs:
   test:
@@ -31,8 +30,6 @@ jobs:
           push: false
           tags: dockette/coder:fx-test
           platforms: linux/amd64
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
           load: true
 
       - name: Smoke test image
