@@ -35,11 +35,17 @@ RUN apt update && apt dist-upgrade -y && \
     curl -fsSL https://bun.sh/install | bash && \
     # CLAUDE ####################################################################
     (curl -fsSL https://claude.ai/install.sh | bash || true) && \
-    if [ -f /root/.local/bin/claude ]; then cp /root/.local/bin/claude /usr/local/bin/claude && chmod +x /usr/local/bin/claude; fi && \
-    if [ -f /root/bin/claude ]; then cp /root/bin/claude /usr/local/bin/claude && chmod +x /usr/local/bin/claude; fi && \
+    mkdir -p /home/coder/.local/bin && \
+    if [ -f /root/.local/bin/claude ]; then cp /root/.local/bin/claude /home/coder/.local/bin/claude; fi && \
+    if [ -f /root/bin/claude ]; then cp /root/bin/claude /home/coder/.local/bin/claude; fi && \
+    chmod +x /home/coder/.local/bin/claude 2>/dev/null || true && \
+    ln -sf /home/coder/.local/bin/claude /usr/local/bin/claude && \
     # OPENCODE ##################################################################
     (curl -fsSL https://opencode.ai/install | bash || true) && \
-    if [ -f /root/.opencode/bin/opencode ]; then cp /root/.opencode/bin/opencode /usr/local/bin/opencode && chmod +x /usr/local/bin/opencode; fi && \
+    mkdir -p /home/coder/.opencode/bin && \
+    if [ -f /root/.opencode/bin/opencode ]; then cp /root/.opencode/bin/opencode /home/coder/.opencode/bin/opencode; fi && \
+    chmod +x /home/coder/.opencode/bin/opencode 2>/dev/null || true && \
+    ln -sf /home/coder/.opencode/bin/opencode /usr/local/bin/opencode && \
     # NPM: CODEX, COPILOT #######################################################
     npm install -g @openai/codex @github/copilot && \
     # CHROME LIBS (AGENT-BROWSER) ###############################################
@@ -58,6 +64,8 @@ RUN apt update && apt dist-upgrade -y && \
     echo 'export BUN_INSTALL="${BUN_INSTALL:-/usr/local}"' >> /etc/profile && \
     echo '[ -d "$DENO_INSTALL/bin" ] && export PATH="$DENO_INSTALL/bin:$PATH"' >> /etc/profile && \
     echo '[ -d "$BUN_INSTALL/bin" ] && export PATH="$BUN_INSTALL/bin:$PATH"' >> /etc/profile && \
+    # OWNERSHIP (coder can upgrade tools) ######################################
+    chown -R coder:coder /home/coder/.local /home/coder/.opencode 2>/dev/null || true && \
     # CLEANUP ###################################################################
     apt clean -y && \
     apt autoclean -y && \
