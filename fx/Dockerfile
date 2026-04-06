@@ -8,7 +8,7 @@ USER root
 
 RUN apt update && apt dist-upgrade -y && \
     mkdir -p -m 755 /etc/apt/keyrings && \
-    apt install -y curl git wget htop jq && \
+    apt install -y curl git wget htop jq ripgrep && \
     # NODE ######################################################################
     curl -fsSL "https://deb.nodesource.com/setup_${NODE_VERSION}.x" | bash - && \
     apt install -y nodejs && \
