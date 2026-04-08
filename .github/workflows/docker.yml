@@ -13,8 +13,12 @@ permissions:
 
 jobs:
   test:
-    name: "Test"
+    name: "Test (${{ matrix.image }})"
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        image: [fx, php, nodejs, golang, python]
     steps:
       - name: Checkout
         uses: actions/checkout@v6
@@ -25,20 +29,24 @@ jobs:
       - name: Build image for testing
         uses: docker/build-push-action@v7
         with:
-          context: ./fx
-          file: ./fx/Dockerfile
+          context: ./${{ matrix.image }}
+          file: ./${{ matrix.image }}/Dockerfile
           push: false
-          tags: dockette/coder:fx-test
+          tags: dockette/coder:${{ matrix.image }}-test
           platforms: linux/amd64
           load: true
 
       - name: Smoke test image
-        run: make test DOCKER_TAG=fx-test
+        run: make test DOCKER_VARIANT=${{ matrix.image }} DOCKER_TAG=${{ matrix.image }}-test
 
   build:
-    name: "Build"
+    name: "Build (${{ matrix.image }})"
     needs: test
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        image: [fx, php, nodejs, golang, python]
     steps:
       - name: Checkout
         uses: actions/checkout@v6
@@ -58,10 +66,10 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v7
         with:
-          context: ./fx
-          file: ./fx/Dockerfile
+          context: ./${{ matrix.image }}
+          file: ./${{ matrix.image }}/Dockerfile
           push: ${{ github.ref == 'refs/heads/master' }}
-          tags: dockette/coder:fx
+          tags: dockette/coder:${{ matrix.image }}
           platforms: linux/amd64
           cache-from: type=gha
           cache-to: type=gha
