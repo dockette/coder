@@ -18,6 +18,10 @@ build-all:
 	$(MAKE) build DOCKER_VARIANT=golang
 	$(MAKE) build DOCKER_VARIANT=python
 
+.PHONY: run
+run:
+	docker run --rm -it --platform ${DOCKER_PLATFORMS} ${DOCKER_IMAGE}:${DOCKER_TAG}
+
 .PHONY: test
 test:
 	$(MAKE) test-${DOCKER_VARIANT}
