@@ -5,6 +5,13 @@
    and extended with PHP, Node tooling, and a few AI CLIs we use day to day.
 </p>
 
+<p align=center>
+  <a href="https://github.com/dockette/coder/actions/workflows/docker.yml"><img src="https://github.com/dockette/coder/actions/workflows/docker.yml/badge.svg?branch=master" alt="GitHub Actions"></a>
+  <a href="https://hub.docker.com/r/dockette/coder/"><img src="https://badgen.net/docker/pulls/dockette/coder" alt="Docker Hub pulls"></a>
+  <a href="https://github.com/sponsors/f3l1x"><img src="https://badgen.net/badge/sponsor/donations/F96854" alt="GitHub Sponsors"></a>
+  <a href="https://github.com/orgs/dockette/discussions"><img src="https://badgen.net/badge/help/discussions/blue" alt="Support Discussions"></a>
+</p>
+
 -----
 
 ## Motivation
@@ -46,8 +53,9 @@ So you’re replacing the plain enterprise base with the same foundation plus ou
 ```bash
 make build
 make test
+make run
 ```
 
------
+## Maintenance
 
-Consider supporting [f3l1x on GitHub Sponsors](https://github.com/sponsors/f3l1x) if you rely on this. Thanks for using it.
+See [how to contribute](https://github.com/dockette/.github/blob/master/CONTRIBUTING.md) to this package. Consider to [support](https://github.com/sponsors/f3l1x) **f3l1x**. Thank you for using this package.
