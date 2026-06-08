@@ -8,7 +8,14 @@ ENV GOROOT=/usr/local/go
 ENV GOPATH=/home/coder/go
 ENV PATH=$GOROOT/bin:$GOPATH/bin:$PATH
 
+# Rootless Docker (docker-in-docker without privileged root)
+ENV XDG_RUNTIME_DIR=/run/user/1000
+ENV DOCKER_HOST=unix:///run/user/1000/docker.sock
+
 USER root
+
+# Helper to bring up the rootless Docker daemon at workspace start
+COPY --chmod=0755 dockerd-rootless-start.sh /usr/local/bin/dockerd-rootless-start
 
 RUN \
     # REPOS ####################################################################
@@ -39,6 +46,8 @@ RUN \
         php8.5-zip php8.5-bcmath php8.5-apcu php8.5-imagick \
         # Python
         python3 python3-pip python3-venv \
+        # Rootless Docker (docker-ce is already in the base image)
+        docker-ce-rootless-extras uidmap dbus-user-session fuse-overlayfs slirp4netns \
         # GitHub CLI
         gh \
         # Chrome libs (agent-browser)
@@ -90,6 +99,10 @@ RUN \
     echo 'export BUN_INSTALL="${BUN_INSTALL:-/usr/local}"' >> /etc/profile && \
     echo '[ -d "$DENO_INSTALL/bin" ] && export PATH="$DENO_INSTALL/bin:$PATH"' >> /etc/profile && \
     echo '[ -d "$BUN_INSTALL/bin" ] && export PATH="$BUN_INSTALL/bin:$PATH"' >> /etc/profile && \
+    echo '' >> /etc/profile && \
+    echo '# Rootless Docker' >> /etc/profile && \
+    echo 'export XDG_RUNTIME_DIR="${XDG_RUNTIME_DIR:-/run/user/$(id -u)}"' >> /etc/profile && \
+    echo 'export DOCKER_HOST="unix://${XDG_RUNTIME_DIR}/docker.sock"' >> /etc/profile && \
     # OWNERSHIP (coder can upgrade tools) ######################################
     chown -R coder:coder /home/coder/.local /home/coder/.opencode /home/coder/go 2>/dev/null || true && \
     # CLEANUP ###################################################################

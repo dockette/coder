@@ -47,6 +47,18 @@ So you’re replacing the plain enterprise base with the same foundation plus ou
 - **Claude** and **OpenCode** installers (best-effort copy to `/usr/local/bin` when present).
 - **npm globals:** `@openai/codex`, `@github/copilot`.
 - **Chrome libraries** plus **agent-browser** (installs its Chromium).
+- **Rootless Docker** (docker-in-docker): Docker CE from the base plus rootless extras (`uidmap`, `fuse-overlayfs`, `slirp4netns`). Run `dockerd-rootless-start` to bring up the daemon as the `coder` user.
+
+### Rootless Docker
+
+The image can run Docker-in-Docker without privileged root. Start the daemon inside the workspace:
+
+```bash
+dockerd-rootless-start
+docker run --rm hello-world
+```
+
+`DOCKER_HOST` and `XDG_RUNTIME_DIR` are preset for login shells, so the CLI talks to the rootless daemon automatically. The host must permit nested user namespaces — in a Coder Terraform template, run the workspace container with `privileged = true` (or the equivalent `--userns` setup), and call `dockerd-rootless-start` from `startup_script` to have Docker ready on boot.
 
 ## Development
 
