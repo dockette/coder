@@ -70,18 +70,16 @@ RUN \
     # BUN #######################################################################
     curl -fsSL https://bun.sh/install | bash && \
     # CLAUDE ####################################################################
+    # Install into /usr/local/bin (image layer) so the binary survives the
+    # persistent /home/coder volume that Coder mounts over the home dir at runtime.
     (curl -fsSL https://claude.ai/install.sh | bash || true) && \
-    mkdir -p /home/coder/.local/bin && \
-    if [ -f /root/.local/bin/claude ]; then cp /root/.local/bin/claude /home/coder/.local/bin/claude; fi && \
-    if [ -f /root/bin/claude ]; then cp /root/bin/claude /home/coder/.local/bin/claude; fi && \
-    chmod +x /home/coder/.local/bin/claude 2>/dev/null || true && \
-    ln -sf /home/coder/.local/bin/claude /usr/local/bin/claude && \
+    if [ -f /root/.local/bin/claude ]; then cp /root/.local/bin/claude /usr/local/bin/claude; fi && \
+    if [ -f /root/bin/claude ]; then cp /root/bin/claude /usr/local/bin/claude; fi && \
+    chmod 0755 /usr/local/bin/claude && \
     # OPENCODE ##################################################################
     (curl -fsSL https://opencode.ai/install | bash || true) && \
-    mkdir -p /home/coder/.opencode/bin && \
-    if [ -f /root/.opencode/bin/opencode ]; then cp /root/.opencode/bin/opencode /home/coder/.opencode/bin/opencode; fi && \
-    chmod +x /home/coder/.opencode/bin/opencode 2>/dev/null || true && \
-    ln -sf /home/coder/.opencode/bin/opencode /usr/local/bin/opencode && \
+    if [ -f /root/.opencode/bin/opencode ]; then cp /root/.opencode/bin/opencode /usr/local/bin/opencode; fi && \
+    chmod 0755 /usr/local/bin/opencode && \
     # NPM: CODEX, COPILOT #######################################################
     npm install -g @openai/codex @github/copilot && \
     # AGENT-BROWSER ##############################################################
@@ -104,7 +102,8 @@ RUN \
     echo 'export XDG_RUNTIME_DIR="${XDG_RUNTIME_DIR:-/run/user/$(id -u)}"' >> /etc/profile && \
     echo 'export DOCKER_HOST="unix://${XDG_RUNTIME_DIR}/docker.sock"' >> /etc/profile && \
     # OWNERSHIP (coder can upgrade tools) ######################################
-    chown -R coder:coder /home/coder/.local /home/coder/.opencode /home/coder/go 2>/dev/null || true && \
+    chown coder:coder /usr/local/bin/claude /usr/local/bin/opencode 2>/dev/null || true && \
+    chown -R coder:coder /home/coder/go 2>/dev/null || true && \
     # CLEANUP ###################################################################
     apt-get clean -y && \
     apt-get autoclean -y && \

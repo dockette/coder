@@ -3,8 +3,7 @@ DOCKER_VARIANT?=fx
 DOCKER_TAG?=$(DOCKER_VARIANT)
 DOCKER_PLATFORMS?=linux/amd64
 
-# Shared tools present in all images
-TOOLS_COMMON=agent-browser gh claude opencode codex copilot
+TEST_RUN=docker run --rm --platform ${DOCKER_PLATFORMS} ${DOCKER_IMAGE}:${DOCKER_TAG}
 
 .PHONY: build
 build:
@@ -35,41 +34,58 @@ test-all:
 	$(MAKE) test-python
 
 .PHONY: test-fx
-test-fx:
-	docker run --rm --platform ${DOCKER_PLATFORMS} ${DOCKER_IMAGE}:${DOCKER_TAG} node --version
-	docker run --rm --platform ${DOCKER_PLATFORMS} ${DOCKER_IMAGE}:${DOCKER_TAG} npm --version
-	docker run --rm --platform ${DOCKER_PLATFORMS} ${DOCKER_IMAGE}:${DOCKER_TAG} node -e "console.log(process.arch)"
-	docker run --rm --platform ${DOCKER_PLATFORMS} ${DOCKER_IMAGE}:${DOCKER_TAG} go version
-	docker run --rm --platform ${DOCKER_PLATFORMS} ${DOCKER_IMAGE}:${DOCKER_TAG} python3 --version
-	docker run --rm --platform ${DOCKER_PLATFORMS} ${DOCKER_IMAGE}:${DOCKER_TAG} pip3 --version
-	docker run --rm --platform ${DOCKER_PLATFORMS} ${DOCKER_IMAGE}:${DOCKER_TAG} php --version
-	docker run --rm --platform ${DOCKER_PLATFORMS} ${DOCKER_IMAGE}:${DOCKER_TAG} composer --version
-	docker run --rm --platform ${DOCKER_PLATFORMS} ${DOCKER_IMAGE}:${DOCKER_TAG} deno --version
-	docker run --rm --platform ${DOCKER_PLATFORMS} ${DOCKER_IMAGE}:${DOCKER_TAG} bun --version
-	$(foreach tool,$(TOOLS_COMMON),docker run --rm --platform ${DOCKER_PLATFORMS} ${DOCKER_IMAGE}:${DOCKER_TAG} $(tool) --version;)
+test-fx: DOCKER_TAG=fx
+test-fx: _testcase-node _testcase-deno _testcase-bun _testcase-php _testcase-python _testcase-golang _testcase-common
 
 .PHONY: test-php
-test-php:
-	docker run --rm --platform ${DOCKER_PLATFORMS} ${DOCKER_IMAGE}:${DOCKER_TAG} php --version
-	docker run --rm --platform ${DOCKER_PLATFORMS} ${DOCKER_IMAGE}:${DOCKER_TAG} composer --version
-	$(foreach tool,$(TOOLS_COMMON),docker run --rm --platform ${DOCKER_PLATFORMS} ${DOCKER_IMAGE}:${DOCKER_TAG} $(tool) --version;)
+test-php: DOCKER_TAG=php
+test-php: _testcase-php _testcase-common
 
 .PHONY: test-nodejs
-test-nodejs:
-	docker run --rm --platform ${DOCKER_PLATFORMS} ${DOCKER_IMAGE}:${DOCKER_TAG} node --version
-	docker run --rm --platform ${DOCKER_PLATFORMS} ${DOCKER_IMAGE}:${DOCKER_TAG} npm --version
-	docker run --rm --platform ${DOCKER_PLATFORMS} ${DOCKER_IMAGE}:${DOCKER_TAG} node -e "console.log(process.arch)"
-	docker run --rm --platform ${DOCKER_PLATFORMS} ${DOCKER_IMAGE}:${DOCKER_TAG} deno --version
-	docker run --rm --platform ${DOCKER_PLATFORMS} ${DOCKER_IMAGE}:${DOCKER_TAG} bun --version
-	$(foreach tool,$(TOOLS_COMMON),docker run --rm --platform ${DOCKER_PLATFORMS} ${DOCKER_IMAGE}:${DOCKER_TAG} $(tool) --version;)
+test-nodejs: DOCKER_TAG=nodejs
+test-nodejs: _testcase-node _testcase-deno _testcase-bun _testcase-common
 
 .PHONY: test-golang
-test-golang:
-	docker run --rm --platform ${DOCKER_PLATFORMS} ${DOCKER_IMAGE}:${DOCKER_TAG} go version
-	$(foreach tool,$(TOOLS_COMMON),docker run --rm --platform ${DOCKER_PLATFORMS} ${DOCKER_IMAGE}:${DOCKER_TAG} $(tool) --version;)
+test-golang: DOCKER_TAG=golang
+test-golang: _testcase-golang _testcase-common
 
 .PHONY: test-python
-test-python:
-	docker run --rm --platform ${DOCKER_PLATFORMS} ${DOCKER_IMAGE}:${DOCKER_TAG} python3 --version
-	docker run --rm --platform ${DOCKER_PLATFORMS} ${DOCKER_IMAGE}:${DOCKER_TAG} pip3 --version
-	$(foreach tool,$(TOOLS_COMMON),docker run --rm --platform ${DOCKER_PLATFORMS} ${DOCKER_IMAGE}:${DOCKER_TAG} $(tool) --version;)
+test-python: DOCKER_TAG=python
+test-python: _testcase-python _testcase-common
+
+.PHONY: _testcase-node
+_testcase-node:
+	$(TEST_RUN) node --version
+	$(TEST_RUN) npm --version
+	$(TEST_RUN) node -e "console.log(process.arch)"
+
+.PHONY: _testcase-deno
+_testcase-deno:
+	$(TEST_RUN) deno --version
+
+.PHONY: _testcase-bun
+_testcase-bun:
+	$(TEST_RUN) bun --version
+
+.PHONY: _testcase-php
+_testcase-php:
+	$(TEST_RUN) php --version
+	$(TEST_RUN) composer --version
+
+.PHONY: _testcase-python
+_testcase-python:
+	$(TEST_RUN) python3 --version
+	$(TEST_RUN) pip3 --version
+
+.PHONY: _testcase-golang
+_testcase-golang:
+	$(TEST_RUN) go version
+
+.PHONY: _testcase-common
+_testcase-common:
+	$(TEST_RUN) agent-browser --version
+	$(TEST_RUN) gh --version
+	$(TEST_RUN) claude --version
+	$(TEST_RUN) opencode --version
+	$(TEST_RUN) codex --version
+	$(TEST_RUN) copilot --version
