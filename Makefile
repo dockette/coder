@@ -85,6 +85,7 @@ _testcase-golang:
 _testcase-common:
 	$(TEST_RUN) agent-browser --version
 	$(TEST_RUN) gh --version
+	$(TEST_RUN) glab --version
 	$(TEST_RUN) claude --version
 	$(TEST_RUN) opencode --version
 	$(TEST_RUN) codex --version

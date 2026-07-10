@@ -4,6 +4,7 @@ ENV DENO_INSTALL=/usr/local
 ENV BUN_INSTALL=/usr/local
 ENV NODE_VERSION=22
 ENV GO_VERSION=1.24.2
+ENV GLAB_VERSION=1.107.0
 ENV GOROOT=/usr/local/go
 ENV GOPATH=/home/coder/go
 ENV PATH=$GOROOT/bin:$GOPATH/bin:$PATH
@@ -65,6 +66,10 @@ RUN \
     mkdir -p /home/coder/go && \
     # COMPOSER ##################################################################
     curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer && \
+    # GLAB (GitLab CLI) ########################################################
+    curl -fsSL "https://gitlab.com/gitlab-org/cli/-/releases/v${GLAB_VERSION}/downloads/glab_${GLAB_VERSION}_linux_$(dpkg --print-architecture).deb" -o /tmp/glab.deb && \
+    dpkg -i /tmp/glab.deb && \
+    rm -f /tmp/glab.deb && \
     # DENO ######################################################################
     curl -fsSL https://deno.land/install.sh | sh && \
     # BUN #######################################################################

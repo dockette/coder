@@ -1,6 +1,7 @@
 FROM codercom/enterprise-base:ubuntu
 
 ENV NODE_VERSION=22
+ENV GLAB_VERSION=1.107.0
 
 USER root
 
@@ -39,6 +40,10 @@ RUN \
     echo 'variables_order = "EGPCS"' > /etc/php/8.5/cli/conf.d/99-coder.ini && \
     # COMPOSER ##################################################################
     curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer && \
+    # GLAB (GitLab CLI) ########################################################
+    curl -fsSL "https://gitlab.com/gitlab-org/cli/-/releases/v${GLAB_VERSION}/downloads/glab_${GLAB_VERSION}_linux_$(dpkg --print-architecture).deb" -o /tmp/glab.deb && \
+    dpkg -i /tmp/glab.deb && \
+    rm -f /tmp/glab.deb && \
     # CLAUDE ####################################################################
     (curl -fsSL https://claude.ai/install.sh | bash || true) && \
     mkdir -p /home/coder/.local/bin && \
