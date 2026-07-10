@@ -2,6 +2,7 @@ FROM codercom/enterprise-base:ubuntu
 
 ENV NODE_VERSION=22
 ENV GO_VERSION=1.24.2
+ENV GLAB_VERSION=1.107.0
 ENV GOROOT=/usr/local/go
 ENV GOPATH=/home/coder/go
 ENV PATH=$GOROOT/bin:$GOPATH/bin:$PATH
@@ -31,6 +32,10 @@ RUN \
         libasound2t64 libx11-xcb1 libxcomposite1 libxdamage1 libxfixes3 libxrandr2 \
         libxi6 libgtk-3-0t64 libcairo2 libcairo-gobject2 libgdk-pixbuf-2.0-0 \
         libatk1.0-0 libxrender1 libfontconfig1 libdbus-1-3 libxcb1 libxext6 libx11-6 && \
+    # GLAB (GitLab CLI) ########################################################
+    curl -fsSL "https://gitlab.com/gitlab-org/cli/-/releases/v${GLAB_VERSION}/downloads/glab_${GLAB_VERSION}_linux_$(dpkg --print-architecture).deb" -o /tmp/glab.deb && \
+    dpkg -i /tmp/glab.deb && \
+    rm -f /tmp/glab.deb && \
     # GOLANG ####################################################################
     ARCH=$(dpkg --print-architecture) && \
     curl -fsSL "https://go.dev/dl/go${GO_VERSION}.linux-${ARCH}.tar.gz" -o /tmp/go.tar.gz && \

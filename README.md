@@ -42,7 +42,7 @@ So you’re replacing the plain enterprise base with the same foundation plus ou
 - **Node.js** (includes **npm**) via Nodesource (**Node 22** in this image).
 - **Shell:** `mc`, `nano`, `tmux`.
 - **PHP 8.5** (Ondrej PPA): CLI + common extensions (curl, intl, mbstring, mysql, pgsql, redis, xml, zip, imagick, etc.).
-- **Composer**, **GitHub CLI (`gh`)**.
+- **Composer**, **GitHub CLI (`gh`)**, **GitLab CLI (`glab`)**.
 - **Deno** and **Bun** under `/usr/local`. `/etc/profile` sets `DENO_INSTALL`, `BUN_INSTALL`, and PATH for login shells.
 - **Claude** and **OpenCode** installers (best-effort copy to `/usr/local/bin` when present).
 - **npm globals:** `@openai/codex`, `@github/copilot`.
