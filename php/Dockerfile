@@ -30,7 +30,7 @@ RUN \
         php8.5-readline php8.5-redis php8.5-soap php8.5-sqlite3 php8.5-xml \
         php8.5-zip php8.5-bcmath php8.5-apcu php8.5-imagick \
         php8.5-xdebug php8.5-pcov \
-        php8.5-opcache php8.5-igbinary php8.5-gmp php8.5-ldap \
+        php8.5-igbinary php8.5-gmp php8.5-ldap \
         php8.5-amqp php8.5-memcached php8.5-xsl php8.5-yaml \
         # GitHub CLI
         gh \
