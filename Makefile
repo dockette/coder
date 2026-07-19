@@ -35,7 +35,7 @@ test-all:
 
 .PHONY: test-fx
 test-fx: DOCKER_TAG=fx
-test-fx: _testcase-node _testcase-deno _testcase-bun _testcase-php _testcase-python _testcase-golang _testcase-common
+test-fx: _testcase-node _testcase-pnpm _testcase-deno _testcase-bun _testcase-php _testcase-php-coverage _testcase-python _testcase-golang _testcase-common
 
 .PHONY: test-php
 test-php: DOCKER_TAG=php
@@ -67,10 +67,19 @@ _testcase-deno:
 _testcase-bun:
 	$(TEST_RUN) bun --version
 
+.PHONY: _testcase-pnpm
+_testcase-pnpm:
+	$(TEST_RUN) pnpm --version
+
 .PHONY: _testcase-php
 _testcase-php:
 	$(TEST_RUN) php --version
 	$(TEST_RUN) composer --version
+
+.PHONY: _testcase-php-coverage
+_testcase-php-coverage:
+	$(TEST_RUN) php -r "exit(extension_loaded('xdebug') ? 0 : 1);"
+	$(TEST_RUN) php -r "exit(extension_loaded('pcov') ? 0 : 1);"
 
 .PHONY: _testcase-python
 _testcase-python:

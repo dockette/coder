@@ -90,6 +90,8 @@ RUN \
     chmod 0755 /usr/local/bin/opencode && \
     # NPM: CODEX, COPILOT #######################################################
     npm install -g @openai/codex @github/copilot && \
+    # PNPM ######################################################################
+    npm install -g pnpm && \
     # AGENT-BROWSER ##############################################################
     npm install -g agent-browser && \
     runuser -u coder -- agent-browser install && \
