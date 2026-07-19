@@ -39,7 +39,7 @@ So you’re replacing the plain enterprise base with the same foundation plus ou
 
 **Base:** `codercom/enterprise-base:ubuntu` (Ubuntu, `coder` user, usual Coder expectations).
 
-- **Node.js** (includes **npm**) via Nodesource (**Node 22** in this image), plus **pnpm**.
+- **Node.js** (includes **npm**) via Nodesource (**Node 24** in this image), plus **pnpm**.
 - **Shell:** `mc`, `nano`, `tmux`.
 - **PHP 8.5** (Ondrej PPA): CLI + common extensions (curl, intl, mbstring, mysql, pgsql, redis, xml, zip, imagick, etc.).
 - **Composer**, **GitHub CLI (`gh`)**, **GitLab CLI (`glab`)**.
