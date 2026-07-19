@@ -2,8 +2,8 @@ FROM codercom/enterprise-base:ubuntu
 
 ENV DENO_INSTALL=/usr/local
 ENV BUN_INSTALL=/usr/local
-ENV NODE_VERSION=22
-ENV GLAB_VERSION=1.107.0
+ENV NODE_VERSION=24
+ENV GLAB_VERSION=1.108.0
 
 USER root
 
