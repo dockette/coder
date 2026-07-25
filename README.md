@@ -39,6 +39,7 @@ one tag per template:
 
 > Node.js (with `npm`) ships in every image because the shared AI CLIs are installed from npm.
 > The `nodejs` tag additionally provides Deno and Bun; only the `fx` tag adds `pnpm`.
+> The [T3 Code](https://github.com/pingdotgg/t3code) browser GUI (`t3`) is bundled only in the `fx` tag.
 
 ### Shared baseline
 
@@ -67,6 +68,10 @@ Choose this when a workspace is polyglot or you don’t want to commit to one st
 - **Python 3** with `pip` and `venv`.
 - **Go 1.26.5** (installed to `/usr/local/go`; `GOROOT`/`GOPATH`/PATH set for login shells).
 - **Rootless Docker** (docker-in-docker) — see [Rootless Docker](#rootless-docker) below.
+- **[T3 Code](https://github.com/pingdotgg/t3code)** (`t3`) — a browser GUI that drives the coding
+  agents (OpenCode, Claude, Codex). Serves a web UI on port `3773`; `t3 serve` runs it headless
+  (no browser popup). Only bundled in the `fx` tag — see
+  [AI coding agents in a Coder workspace](#ai-coding-agents-in-a-coder-workspace).
 
 ### `dockette/coder:php`
 
@@ -112,6 +117,79 @@ resource "docker_container" "workspace" {
 ```
 
 Swap `fx` for `php`, `nodejs`, `golang`, or `python` to use a lighter, stack-specific image.
+
+## AI coding agents in a Coder workspace
+
+The `fx` image ships both `opencode` (a terminal agent) and
+[T3 Code](https://github.com/pingdotgg/t3code) (`t3`) — a browser GUI that drives OpenCode, Claude,
+and Codex. T3 Code serves a web UI on port `3773`; `t3 serve` runs it headless (no browser popup),
+which is what you want on a remote workspace.
+
+Wire them into your Coder Terraform template so a workspace can start T3 Code in the **background**
+and expose it as a clickable **icon** on the dashboard. A workspace-creation parameter picks which
+agents are enabled — by default only `opencode`, with T3 Code opt-in at create time:
+
+```hcl
+# Shown when creating a workspace. Default: OpenCode only; T3 Code is opt-in.
+data "coder_parameter" "ai_agents" {
+  name         = "ai_agents"
+  display_name = "AI coding agents"
+  description  = "Which AI coding agents to enable in this workspace."
+  type         = "list(string)"
+  form_type    = "multi-select"
+  default      = jsonencode(["opencode"])
+  mutable      = true
+
+  option {
+    name  = "OpenCode"
+    value = "opencode"
+  }
+  option {
+    name  = "T3 Code"
+    value = "t3code"
+  }
+}
+
+locals {
+  agents      = jsondecode(data.coder_parameter.ai_agents.value)
+  opencode_on = contains(local.agents, "opencode")
+  t3code_on   = contains(local.agents, "t3code")
+}
+
+resource "coder_agent" "main" {
+  # ... arch / os / other startup steps ...
+  startup_script = <<-EOT
+    set -e
+    # `if true; then` / `if false; then` — the interpolated bool is a shell builtin.
+    if ${local.t3code_on}; then
+      # Start T3 Code headless in the background, bound to localhost:3773.
+      T3CODE_NO_BROWSER=1 nohup t3 serve --host 127.0.0.1 --port 3773 \
+        > "$HOME/.t3code.log" 2>&1 &
+    fi
+    # opencode is a terminal agent — launch it from a workspace terminal with `opencode`.
+  EOT
+}
+
+# Clickable "T3 Code" icon in the dashboard, only when it's enabled.
+resource "coder_app" "t3code" {
+  count        = local.t3code_on ? 1 : 0
+  agent_id     = coder_agent.main.id
+  slug         = "t3code"
+  display_name = "T3 Code"
+  icon         = "/icon/code.svg"
+  url          = "http://localhost:3773"
+  subdomain    = true
+  share        = "owner"
+
+  healthcheck {
+    url       = "http://localhost:3773"
+    interval  = 5
+    threshold = 30
+  }
+}
+```
+
+To enable T3 Code by default instead, set `default = jsonencode(["opencode", "t3code"])`.
 
 ## Rootless Docker
 

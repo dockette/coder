@@ -35,7 +35,7 @@ test-all:
 
 .PHONY: test-fx
 test-fx: DOCKER_TAG=fx
-test-fx: _testcase-node _testcase-pnpm _testcase-deno _testcase-bun _testcase-php _testcase-php-coverage _testcase-python _testcase-golang _testcase-common
+test-fx: _testcase-node _testcase-pnpm _testcase-deno _testcase-bun _testcase-php _testcase-php-coverage _testcase-python _testcase-golang _testcase-t3code _testcase-common
 
 .PHONY: test-php
 test-php: DOCKER_TAG=php
@@ -89,6 +89,10 @@ _testcase-python:
 .PHONY: _testcase-golang
 _testcase-golang:
 	$(TEST_RUN) go version
+
+.PHONY: _testcase-t3code
+_testcase-t3code:
+	$(TEST_RUN) t3 --version
 
 .PHONY: _testcase-common
 _testcase-common:
