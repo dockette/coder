@@ -91,8 +91,6 @@ RUN \
     # NPM: CODEX, COPILOT #######################################################
     npm install -g @openai/codex @github/copilot && \
     # T3CODE (browser GUI for coding agents) ###################################
-    # fx-only: a web front-end that drives opencode/claude/codex. `t3 serve`
-    # runs it headless (no browser popup); default UI port is 3773.
     npm install -g t3 && \
     # PNPM ######################################################################
     npm install -g pnpm && \
