@@ -39,6 +39,7 @@ one tag per template:
 
 > Node.js (with `npm`) ships in every image because the shared AI CLIs are installed from npm.
 > The `nodejs` tag additionally provides Deno and Bun; only the `fx` tag adds `pnpm`.
+> The [T3 Code](https://github.com/pingdotgg/t3code) browser GUI (`t3`) is bundled only in the `fx` tag.
 
 ### Shared baseline
 
@@ -67,6 +68,9 @@ Choose this when a workspace is polyglot or you don’t want to commit to one st
 - **Python 3** with `pip` and `venv`.
 - **Go 1.26.5** (installed to `/usr/local/go`; `GOROOT`/`GOPATH`/PATH set for login shells).
 - **Rootless Docker** (docker-in-docker) — see [Rootless Docker](#rootless-docker) below.
+- **[T3 Code](https://github.com/pingdotgg/t3code)** (`t3`) — a browser GUI that drives the coding
+  agents (OpenCode, Claude, Codex). Serves a web UI on port `3773`; `t3 serve` runs it headless
+  (no browser popup). Only bundled in the `fx` tag.
 
 ### `dockette/coder:php`
 
