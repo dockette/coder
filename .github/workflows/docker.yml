@@ -71,8 +71,8 @@ jobs:
           push: ${{ github.ref == 'refs/heads/master' }}
           tags: dockette/coder:${{ matrix.image }}
           platforms: linux/amd64
-          cache-from: type=gha
-          cache-to: type=gha
+          cache-from: type=gha,scope=${{ matrix.image }}
+          cache-to: type=gha,scope=${{ matrix.image }},mode=max
 
   docs:
     name: "Docs"
