@@ -13,6 +13,9 @@ ENV PATH=$GOROOT/bin:$GOPATH/bin:$PATH
 ENV XDG_RUNTIME_DIR=/run/user/1000
 ENV DOCKER_HOST=unix:///run/user/1000/docker.sock
 
+# T3 Code: opt out of telemetry by default
+ENV T3CODE_TELEMETRY_ENABLED=false
+
 USER root
 
 # Helper to bring up the rootless Docker daemon at workspace start
