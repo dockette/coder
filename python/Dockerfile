@@ -21,7 +21,7 @@ RUN \
     apt-get update && \
     apt-get dist-upgrade -y && \
     apt-get install -y --no-install-recommends \
-        git jq ripgrep nodejs gh \
+        git jq ripgrep tmux nodejs gh \
         # Python
         python3 python3-pip python3-venv \
         # Chrome libs (agent-browser)
