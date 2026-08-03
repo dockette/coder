@@ -4,7 +4,7 @@ ENV DENO_INSTALL=/usr/local
 ENV BUN_INSTALL=/usr/local
 ENV NODE_VERSION=24
 ENV GO_VERSION=1.26.5
-ENV GLAB_VERSION=1.108.0
+ENV GLAB_VERSION=1.111.0
 ENV GOROOT=/usr/local/go
 ENV GOPATH=/home/coder/go
 ENV PATH=$GOROOT/bin:$GOPATH/bin:$PATH
@@ -93,6 +93,9 @@ RUN \
     chmod 0755 /usr/local/bin/opencode && \
     # NPM: CODEX, COPILOT #######################################################
     npm install -g @openai/codex @github/copilot && \
+    # PI (coding agent from the pi monorepo) ###################################
+    # --ignore-scripts per upstream install docs; pi needs no lifecycle scripts.
+    npm install -g --ignore-scripts @earendil-works/pi-coding-agent && \
     # T3CODE (browser GUI for coding agents) ###################################
     npm install -g t3 && \
     # PNPM ######################################################################

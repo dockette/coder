@@ -48,7 +48,9 @@ Every image includes:
 - **Base tooling:** `git`, `jq`, `ripgrep`.
 - **Node.js 24** with `npm` (via NodeSource).
 - **VCS CLIs:** GitHub CLI (`gh`) and GitLab CLI (`glab`).
-- **AI CLIs:** `claude` (Claude Code), `opencode`, `codex` (`@openai/codex`), and `copilot` (`@github/copilot`).
+- **AI CLIs:** `claude` (Claude Code), `opencode`, `codex` (`@openai/codex`), `copilot`
+  (`@github/copilot`), and `pi` — the [pi](https://pi.dev) coding agent from the
+  [pi monorepo](https://github.com/earendil-works/pi) (`@earendil-works/pi-coding-agent`).
 - **Browser automation:** `agent-browser` plus the Chrome shared libraries it needs (Chromium is
   installed on first `agent-browser install`).
 

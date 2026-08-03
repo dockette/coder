@@ -2,7 +2,7 @@ FROM codercom/enterprise-base:ubuntu
 
 ENV NODE_VERSION=24
 ENV GO_VERSION=1.26.5
-ENV GLAB_VERSION=1.108.0
+ENV GLAB_VERSION=1.111.0
 ENV GOROOT=/usr/local/go
 ENV GOPATH=/home/coder/go
 ENV PATH=$GOROOT/bin:$GOPATH/bin:$PATH
@@ -57,6 +57,9 @@ RUN \
     ln -sf /home/coder/.opencode/bin/opencode /usr/local/bin/opencode && \
     # NPM: CODEX, COPILOT #######################################################
     npm install -g @openai/codex @github/copilot && \
+    # PI (coding agent from the pi monorepo) ###################################
+    # --ignore-scripts per upstream install docs; pi needs no lifecycle scripts.
+    npm install -g --ignore-scripts @earendil-works/pi-coding-agent && \
     # AGENT-BROWSER ##############################################################
     npm install -g agent-browser && \
     runuser -u coder -- agent-browser install && \

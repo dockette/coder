@@ -103,3 +103,4 @@ _testcase-common:
 	$(TEST_RUN) opencode --version
 	$(TEST_RUN) codex --version
 	$(TEST_RUN) copilot --version
+	$(TEST_RUN) pi --version
