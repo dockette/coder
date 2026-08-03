@@ -53,8 +53,7 @@ RUN \
     ln -sf /home/coder/.opencode/bin/opencode /usr/local/bin/opencode && \
     # NPM: CODEX, COPILOT #######################################################
     npm install -g @openai/codex @github/copilot && \
-    # PI (coding agent from the pi monorepo) ###################################
-    # --ignore-scripts per upstream install docs; pi needs no lifecycle scripts.
+    # PI ########################################################################
     npm install -g --ignore-scripts @earendil-works/pi-coding-agent && \
     # AGENT-BROWSER ##############################################################
     npm install -g agent-browser && \

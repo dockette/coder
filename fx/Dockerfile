@@ -93,8 +93,7 @@ RUN \
     chmod 0755 /usr/local/bin/opencode && \
     # NPM: CODEX, COPILOT #######################################################
     npm install -g @openai/codex @github/copilot && \
-    # PI (coding agent from the pi monorepo) ###################################
-    # --ignore-scripts per upstream install docs; pi needs no lifecycle scripts.
+    # PI ########################################################################
     npm install -g --ignore-scripts @earendil-works/pi-coding-agent && \
     # T3CODE (browser GUI for coding agents) ###################################
     npm install -g t3 && \
