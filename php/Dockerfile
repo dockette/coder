@@ -1,7 +1,7 @@
 FROM codercom/enterprise-base:ubuntu
 
 ENV NODE_VERSION=24
-ENV GLAB_VERSION=1.108.0
+ENV GLAB_VERSION=1.111.0
 
 USER root
 
@@ -23,7 +23,7 @@ RUN \
     apt-get update && \
     apt-get dist-upgrade -y && \
     apt-get install -y --no-install-recommends \
-        git jq ripgrep nodejs \
+        git jq ripgrep tmux nodejs \
         # PHP
         php8.5-cli php8.5-common php8.5-curl php8.5-gd php8.5-imap php8.5-intl \
         php8.5-mailparse php8.5-mbstring php8.5-mysql php8.5-pgsql php8.5-phpdbg \
@@ -62,6 +62,8 @@ RUN \
     ln -sf /home/coder/.opencode/bin/opencode /usr/local/bin/opencode && \
     # NPM: CODEX, COPILOT #######################################################
     npm install -g @openai/codex @github/copilot && \
+    # PI ########################################################################
+    npm install -g --ignore-scripts @earendil-works/pi-coding-agent && \
     # AGENT-BROWSER ##############################################################
     npm install -g agent-browser && \
     runuser -u coder -- agent-browser install && \

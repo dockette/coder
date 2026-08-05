@@ -45,10 +45,11 @@ one tag per template:
 
 Every image includes:
 
-- **Base tooling:** `git`, `jq`, `ripgrep`.
+- **Base tooling:** `git`, `jq`, `ripgrep`, `tmux`.
 - **Node.js 24** with `npm` (via NodeSource).
 - **VCS CLIs:** GitHub CLI (`gh`) and GitLab CLI (`glab`).
-- **AI CLIs:** `claude` (Claude Code), `opencode`, `codex` (`@openai/codex`), and `copilot` (`@github/copilot`).
+- **AI CLIs:** `claude` (Claude Code), `opencode`, `codex` (`@openai/codex`), `copilot`
+  (`@github/copilot`), and `pi` (`@earendil-works/pi-coding-agent`).
 - **Browser automation:** `agent-browser` plus the Chrome shared libraries it needs (Chromium is
   installed on first `agent-browser install`).
 

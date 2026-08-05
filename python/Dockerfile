@@ -1,7 +1,7 @@
 FROM codercom/enterprise-base:ubuntu
 
 ENV NODE_VERSION=24
-ENV GLAB_VERSION=1.108.0
+ENV GLAB_VERSION=1.111.0
 
 USER root
 
@@ -21,7 +21,7 @@ RUN \
     apt-get update && \
     apt-get dist-upgrade -y && \
     apt-get install -y --no-install-recommends \
-        git jq ripgrep nodejs gh \
+        git jq ripgrep tmux nodejs gh \
         # Python
         python3 python3-pip python3-venv \
         # Chrome libs (agent-browser)
@@ -49,6 +49,8 @@ RUN \
     ln -sf /home/coder/.opencode/bin/opencode /usr/local/bin/opencode && \
     # NPM: CODEX, COPILOT #######################################################
     npm install -g @openai/codex @github/copilot && \
+    # PI ########################################################################
+    npm install -g --ignore-scripts @earendil-works/pi-coding-agent && \
     # AGENT-BROWSER ##############################################################
     npm install -g agent-browser && \
     runuser -u coder -- agent-browser install && \
