@@ -25,11 +25,9 @@ RUN \
     # REPOS ####################################################################
     # Add all package repos first, then do a single apt-get update
     apt-get update && \
-    apt-get install -y --no-install-recommends curl wget software-properties-common gpg && \
+    apt-get install -y --no-install-recommends curl wget gpg && \
     # Node repo
     curl -fsSL "https://deb.nodesource.com/setup_${NODE_VERSION}.x" | bash - && \
-    # PHP repo
-    add-apt-repository -y ppa:ondrej/php && \
     # GitHub CLI repo
     wget -qO /tmp/githubcli-archive-keyring.gpg https://cli.github.com/packages/githubcli-archive-keyring.gpg && \
     mkdir -p -m 755 /etc/apt/keyrings && \
@@ -44,7 +42,7 @@ RUN \
         # Node
         nodejs \
         # PHP
-        php8.5-cli php8.5-common php8.5-curl php8.5-gd php8.5-imap php8.5-intl \
+        php8.5-cli php8.5-common php8.5-curl php8.5-gd php8.5-intl \
         php8.5-mailparse php8.5-mbstring php8.5-mysql php8.5-pgsql php8.5-phpdbg \
         php8.5-readline php8.5-redis php8.5-soap php8.5-sqlite3 php8.5-xml \
         php8.5-zip php8.5-bcmath php8.5-apcu php8.5-imagick \
@@ -124,7 +122,7 @@ RUN \
     # CLEANUP ###################################################################
     apt-get clean -y && \
     apt-get autoclean -y && \
-    apt-get remove -y wget software-properties-common && \
+    apt-get remove -y wget && \
     apt-get autoremove -y && \
     rm -rf /var/lib/apt/lists/* /var/lib/log/* /tmp/* /var/tmp/* \
            /root/.npm /root/.cache /root/.local /root/.opencode /root/.bun
