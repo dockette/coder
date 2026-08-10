@@ -97,6 +97,7 @@ _testcase-t3code:
 .PHONY: _testcase-common
 _testcase-common:
 	$(TEST_RUN) tmux -V
+	$(TEST_RUN) nano --version
 	$(TEST_RUN) agent-browser --version
 	$(TEST_RUN) gh --version
 	$(TEST_RUN) glab --version

@@ -28,7 +28,7 @@ RUN \
     apt-get update && \
     apt-get dist-upgrade -y && \
     apt-get install -y --no-install-recommends \
-        git jq ripgrep tmux nodejs \
+        git jq ripgrep tmux nano nodejs \
         # PHP
         php8.5-cli php8.5-common php8.5-curl php8.5-gd php8.5-intl \
         php8.5-mailparse php8.5-mbstring php8.5-mysql php8.5-pgsql php8.5-phpdbg \

@@ -31,7 +31,7 @@ RUN \
     apt-get update && \
     apt-get dist-upgrade -y && \
     apt-get install -y --no-install-recommends \
-        git jq ripgrep tmux nodejs gh \
+        git jq ripgrep tmux nano nodejs gh \
         # Chrome libs (agent-browser)
         libnspr4 libnss3 libatk-bridge2.0-0 libdrm2 libxkbcommon0 libatspi2.0-0 \
         libcups2t64 libxshmfence1 libgbm1 libpango-1.0-0 libpangocairo-1.0-0 \

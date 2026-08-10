@@ -50,7 +50,7 @@ RUN \
     apt-get update && \
     apt-get dist-upgrade -y && \
     apt-get install -y --no-install-recommends \
-        git jq ripgrep tmux \
+        git jq ripgrep tmux nano \
         # Node
         nodejs \
         # PHP
