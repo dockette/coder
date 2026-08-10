@@ -20,11 +20,6 @@ ENV GOROOT=/usr/local/go
 ENV GOPATH=/home/coder/go
 ENV PATH=$GOROOT/bin:$GOPATH/bin:$PATH
 
-# Rootless Docker (docker-in-docker without privileged root).
-# Defaults. The environment can override them.
-ENV XDG_RUNTIME_DIR=/run/user/1000
-ENV DOCKER_HOST=unix:///run/user/1000/docker.sock
-
 # T3 Code: opt out of telemetry by default
 ENV T3CODE_TELEMETRY_ENABLED=false
 
