@@ -119,8 +119,8 @@ RUN \
     echo 'export XDG_RUNTIME_DIR="${XDG_RUNTIME_DIR:-/run/user/$(id -u)}"' >> /etc/profile && \
     echo 'export DOCKER_HOST="unix://${XDG_RUNTIME_DIR}/docker.sock"' >> /etc/profile && \
     # OWNERSHIP (coder can upgrade tools) ######################################
-    chown coder:coder /usr/local/bin/claude /usr/local/bin/opencode 2>/dev/null || true && \
-    chown -R coder:coder /home/coder/go 2>/dev/null || true && \
+    chown coder:coder /usr/local/bin/claude /usr/local/bin/opencode && \
+    chown -R coder:coder /home/coder/go && \
     # CLEANUP ###################################################################
     apt-get clean -y && \
     apt-get autoclean -y && \
