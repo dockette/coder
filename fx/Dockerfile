@@ -5,6 +5,7 @@ ENV BUN_INSTALL=/usr/local
 ENV NODE_VERSION=24
 ENV GO_VERSION=1.26.5
 ENV GLAB_VERSION=1.111.0
+ENV OPENCODE_VERSION=1.18.13
 ENV GOROOT=/usr/local/go
 ENV GOPATH=/home/coder/go
 ENV PATH=$GOROOT/bin:$GOPATH/bin:$PATH
@@ -86,9 +87,10 @@ RUN \
     if [ -f /root/bin/claude ]; then cp /root/bin/claude /usr/local/bin/claude; fi && \
     chmod 0755 /usr/local/bin/claude && \
     # OPENCODE ##################################################################
-    (curl -fsSL https://opencode.ai/install | bash || true) && \
-    if [ -f /root/.opencode/bin/opencode ]; then cp /root/.opencode/bin/opencode /usr/local/bin/opencode; fi && \
+    curl -fsSL https://opencode.ai/install | VERSION=${OPENCODE_VERSION} bash -s -- --no-modify-path && \
+    cp /root/.opencode/bin/opencode /usr/local/bin/opencode && \
     chmod 0755 /usr/local/bin/opencode && \
+    opencode --version && \
     # NPM: CODEX, COPILOT #######################################################
     npm install -g @openai/codex @github/copilot && \
     # PI ########################################################################
