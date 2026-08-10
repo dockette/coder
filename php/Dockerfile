@@ -2,6 +2,7 @@ FROM codercom/enterprise-base:ubuntu
 
 ENV NODE_VERSION=24
 ENV GLAB_VERSION=1.111.0
+ENV OPENCODE_VERSION=1.18.13
 
 USER root
 
@@ -53,11 +54,12 @@ RUN \
     chmod +x /home/coder/.local/bin/claude 2>/dev/null || true && \
     ln -sf /home/coder/.local/bin/claude /usr/local/bin/claude && \
     # OPENCODE ##################################################################
-    (curl -fsSL https://opencode.ai/install | bash || true) && \
+    curl -fsSL https://opencode.ai/install | VERSION=${OPENCODE_VERSION} bash -s -- --no-modify-path && \
     mkdir -p /home/coder/.opencode/bin && \
-    if [ -f /root/.opencode/bin/opencode ]; then cp /root/.opencode/bin/opencode /home/coder/.opencode/bin/opencode; fi && \
-    chmod +x /home/coder/.opencode/bin/opencode 2>/dev/null || true && \
+    cp /root/.opencode/bin/opencode /home/coder/.opencode/bin/opencode && \
+    chmod 0755 /home/coder/.opencode/bin/opencode && \
     ln -sf /home/coder/.opencode/bin/opencode /usr/local/bin/opencode && \
+    opencode --version && \
     # NPM: CODEX, COPILOT #######################################################
     npm install -g @openai/codex @github/copilot && \
     # PI ########################################################################
