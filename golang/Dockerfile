@@ -48,7 +48,7 @@ RUN \
     mkdir -p /home/coder/.local/bin && \
     if [ -f /root/.local/bin/claude ]; then cp /root/.local/bin/claude /home/coder/.local/bin/claude; fi && \
     if [ -f /root/bin/claude ]; then cp /root/bin/claude /home/coder/.local/bin/claude; fi && \
-    chmod +x /home/coder/.local/bin/claude 2>/dev/null || true && \
+    (chmod +x /home/coder/.local/bin/claude 2>/dev/null || true) && \
     ln -sf /home/coder/.local/bin/claude /usr/local/bin/claude && \
     # OPENCODE ##################################################################
     curl -fsSL https://opencode.ai/install | VERSION=${OPENCODE_VERSION} bash -s -- --no-modify-path && \
@@ -71,7 +71,7 @@ RUN \
     echo 'export GOPATH="$HOME/go"' >> /etc/profile && \
     echo 'export PATH="$GOROOT/bin:$GOPATH/bin:$PATH"' >> /etc/profile && \
     # OWNERSHIP ################################################################
-    chown -R coder:coder /home/coder/.local /home/coder/.opencode /home/coder/go 2>/dev/null || true && \
+    chown -R coder:coder /home/coder/.local /home/coder/.opencode /home/coder/go && \
     # CLEANUP ###################################################################
     apt-get clean -y && \
     apt-get autoclean -y && \
