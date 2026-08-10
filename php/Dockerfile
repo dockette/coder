@@ -3,6 +3,12 @@ FROM codercom/enterprise-base:ubuntu
 ENV NODE_VERSION=24
 ENV GLAB_VERSION=1.111.0
 ENV OPENCODE_VERSION=1.18.13
+ENV CLAUDE_VERSION=2.1.224
+ENV COMPOSER_VERSION=2.10.2
+ENV CODEX_VERSION=0.147.0
+ENV COPILOT_VERSION=1.0.78
+ENV PI_VERSION=0.84.1
+ENV AGENT_BROWSER_VERSION=0.33.2
 
 USER root
 
@@ -41,13 +47,13 @@ RUN \
         libatk1.0-0 libxrender1 libfontconfig1 libdbus-1-3 libxcb1 libxext6 libx11-6 && \
     echo 'variables_order = "EGPCS"' > /etc/php/8.5/cli/conf.d/99-coder.ini && \
     # COMPOSER ##################################################################
-    curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer && \
+    curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer --version=${COMPOSER_VERSION} && \
     # GLAB (GitLab CLI) ########################################################
     curl -fsSL "https://gitlab.com/gitlab-org/cli/-/releases/v${GLAB_VERSION}/downloads/glab_${GLAB_VERSION}_linux_$(dpkg --print-architecture).deb" -o /tmp/glab.deb && \
     dpkg -i /tmp/glab.deb && \
     rm -f /tmp/glab.deb && \
     # CLAUDE ####################################################################
-    (curl -fsSL https://claude.ai/install.sh | bash || true) && \
+    (curl -fsSL https://claude.ai/install.sh | bash -s ${CLAUDE_VERSION} || true) && \
     mkdir -p /home/coder/.local/bin && \
     if [ -f /root/.local/bin/claude ]; then cp /root/.local/bin/claude /home/coder/.local/bin/claude; fi && \
     if [ -f /root/bin/claude ]; then cp /root/bin/claude /home/coder/.local/bin/claude; fi && \
@@ -61,11 +67,11 @@ RUN \
     ln -sf /home/coder/.opencode/bin/opencode /usr/local/bin/opencode && \
     opencode --version && \
     # NPM: CODEX, COPILOT #######################################################
-    npm install -g @openai/codex @github/copilot && \
+    npm install -g @openai/codex@${CODEX_VERSION} @github/copilot@${COPILOT_VERSION} && \
     # PI ########################################################################
-    npm install -g --ignore-scripts @earendil-works/pi-coding-agent && \
+    npm install -g --ignore-scripts @earendil-works/pi-coding-agent@${PI_VERSION} && \
     # AGENT-BROWSER ##############################################################
-    npm install -g agent-browser && \
+    npm install -g agent-browser@${AGENT_BROWSER_VERSION} && \
     runuser -u coder -- agent-browser install && \
     # OWNERSHIP ################################################################
     chown -R coder:coder /home/coder/.local /home/coder/.opencode && \

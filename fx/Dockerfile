@@ -6,6 +6,16 @@ ENV NODE_VERSION=24
 ENV GO_VERSION=1.26.5
 ENV GLAB_VERSION=1.111.0
 ENV OPENCODE_VERSION=1.18.13
+ENV CLAUDE_VERSION=2.1.224
+ENV DENO_VERSION=2.9.4
+ENV BUN_VERSION=1.3.14
+ENV COMPOSER_VERSION=2.10.2
+ENV CODEX_VERSION=0.147.0
+ENV COPILOT_VERSION=1.0.78
+ENV PI_VERSION=0.84.1
+ENV T3_VERSION=0.0.31
+ENV PNPM_VERSION=11.20.0
+ENV AGENT_BROWSER_VERSION=0.33.2
 ENV GOROOT=/usr/local/go
 ENV GOPATH=/home/coder/go
 ENV PATH=$GOROOT/bin:$GOPATH/bin:$PATH
@@ -70,19 +80,19 @@ RUN \
     rm /tmp/go.tar.gz && \
     mkdir -p /home/coder/go && \
     # COMPOSER ##################################################################
-    curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer && \
+    curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer --version=${COMPOSER_VERSION} && \
     # GLAB (GitLab CLI) ########################################################
     curl -fsSL "https://gitlab.com/gitlab-org/cli/-/releases/v${GLAB_VERSION}/downloads/glab_${GLAB_VERSION}_linux_$(dpkg --print-architecture).deb" -o /tmp/glab.deb && \
     dpkg -i /tmp/glab.deb && \
     rm -f /tmp/glab.deb && \
     # DENO ######################################################################
-    curl -fsSL https://deno.land/install.sh | sh && \
+    curl -fsSL https://deno.land/install.sh | sh -s v${DENO_VERSION} && \
     # BUN #######################################################################
-    curl -fsSL https://bun.sh/install | bash && \
+    curl -fsSL https://bun.sh/install | bash -s "bun-v${BUN_VERSION}" && \
     # CLAUDE ####################################################################
     # Install into /usr/local/bin (image layer) so the binary survives the
     # persistent /home/coder volume that Coder mounts over the home dir at runtime.
-    (curl -fsSL https://claude.ai/install.sh | bash || true) && \
+    (curl -fsSL https://claude.ai/install.sh | bash -s ${CLAUDE_VERSION} || true) && \
     if [ -f /root/.local/bin/claude ]; then cp /root/.local/bin/claude /usr/local/bin/claude; fi && \
     if [ -f /root/bin/claude ]; then cp /root/bin/claude /usr/local/bin/claude; fi && \
     chmod 0755 /usr/local/bin/claude && \
@@ -92,15 +102,15 @@ RUN \
     chmod 0755 /usr/local/bin/opencode && \
     opencode --version && \
     # NPM: CODEX, COPILOT #######################################################
-    npm install -g @openai/codex @github/copilot && \
+    npm install -g @openai/codex@${CODEX_VERSION} @github/copilot@${COPILOT_VERSION} && \
     # PI ########################################################################
-    npm install -g --ignore-scripts @earendil-works/pi-coding-agent && \
+    npm install -g --ignore-scripts @earendil-works/pi-coding-agent@${PI_VERSION} && \
     # T3CODE (browser GUI for coding agents) ###################################
-    npm install -g t3 && \
+    npm install -g t3@${T3_VERSION} && \
     # PNPM ######################################################################
-    npm install -g pnpm && \
+    npm install -g pnpm@${PNPM_VERSION} && \
     # AGENT-BROWSER ##############################################################
-    npm install -g agent-browser && \
+    npm install -g agent-browser@${AGENT_BROWSER_VERSION} && \
     runuser -u coder -- agent-browser install && \
     # PROFILE (DENO, BUN PATH) ##################################################
     echo '' >> /etc/profile && \
