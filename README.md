@@ -132,6 +132,9 @@ daemon automatically. The host must permit nested user namespaces — in a Coder
 run the workspace container with `privileged = true` (or the equivalent `--userns` setup), and call
 `dockerd-rootless-start` from `startup_script` so Docker is ready on boot.
 
+Both variables are defaults. If `DOCKER_HOST` is already set, the image and the script keep that
+value. The script starts no daemon if one answers there.
+
 ## Development
 
 Images are built and tested per template with the provided `Makefile`. `DOCKER_VARIANT` selects the

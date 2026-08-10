@@ -8,22 +8,37 @@
 #     dockerd-rootless-start
 #     docker run --rm hello-world
 #
+# A DOCKER_HOST from the environment is used if set.
+#
 # Note: the host must allow user namespaces. In Coder, run the container
 # with --userns-host or the equivalent template option.
 set -euo pipefail
 
 uid="$(id -u)"
-export XDG_RUNTIME_DIR="${XDG_RUNTIME_DIR:-/run/user/${uid}}"
-export DOCKER_HOST="unix://${XDG_RUNTIME_DIR}/docker.sock"
+export DOCKER_HOST="${DOCKER_HOST:-unix://${XDG_RUNTIME_DIR:-/run/user/${uid}}/docker.sock}"
+
+if docker info >/dev/null 2>&1; then
+    echo "docker daemon already reachable at ${DOCKER_HOST}"
+    exit 0
+fi
+
+# dockerd-rootless.sh listens on ${XDG_RUNTIME_DIR}/docker.sock. Set the runtime
+# dir from DOCKER_HOST so the daemon and the CLI use the same socket.
+case "$DOCKER_HOST" in
+    unix://*/docker.sock)
+        socket="${DOCKER_HOST#unix://}"
+        export XDG_RUNTIME_DIR="$(dirname "$socket")"
+        ;;
+    *)
+        echo "no daemon at DOCKER_HOST=${DOCKER_HOST}" >&2
+        echo "rootless dockerd needs a unix .../docker.sock path; unset DOCKER_HOST for the default" >&2
+        exit 1
+        ;;
+esac
 
 # /run/user/<uid> lives on tmpfs and is recreated on every container start.
 if [ ! -d "$XDG_RUNTIME_DIR" ]; then
     sudo install -d -m 0700 -o "$uid" -g "$(id -g)" "$XDG_RUNTIME_DIR"
-fi
-
-if docker info >/dev/null 2>&1; then
-    echo "rootless dockerd already running at ${DOCKER_HOST}"
-    exit 0
 fi
 
 echo "starting rootless dockerd ..."

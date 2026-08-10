@@ -20,7 +20,8 @@ ENV GOROOT=/usr/local/go
 ENV GOPATH=/home/coder/go
 ENV PATH=$GOROOT/bin:$GOPATH/bin:$PATH
 
-# Rootless Docker (docker-in-docker without privileged root)
+# Rootless Docker (docker-in-docker without privileged root).
+# Defaults. The environment can override them.
 ENV XDG_RUNTIME_DIR=/run/user/1000
 ENV DOCKER_HOST=unix:///run/user/1000/docker.sock
 
@@ -127,7 +128,7 @@ RUN \
     echo '' >> /etc/profile && \
     echo '# Rootless Docker' >> /etc/profile && \
     echo 'export XDG_RUNTIME_DIR="${XDG_RUNTIME_DIR:-/run/user/$(id -u)}"' >> /etc/profile && \
-    echo 'export DOCKER_HOST="unix://${XDG_RUNTIME_DIR}/docker.sock"' >> /etc/profile && \
+    echo 'export DOCKER_HOST="${DOCKER_HOST:-unix://${XDG_RUNTIME_DIR}/docker.sock}"' >> /etc/profile && \
     # OWNERSHIP (coder can upgrade tools) ######################################
     chown coder:coder /usr/local/bin/claude /usr/local/bin/opencode && \
     chown -R coder:coder /home/coder/go && \
