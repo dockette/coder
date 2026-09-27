@@ -67,7 +67,7 @@ Choose this when a workspace is polyglot or you don’t want to commit to one st
   `xsl`, `yaml`, …) and both coverage drivers (`xdebug`, `pcov`).
 - **Composer**.
 - **Python 3** with `pip` and `venv`.
-- **Go 1.26.5** (installed to `/usr/local/go`; `GOROOT`/`GOPATH`/PATH set for login shells).
+- **Go 1.27.1** (installed to `/usr/local/go`; `GOROOT`/`GOPATH`/PATH set for login shells).
 - **Rootless Docker** (docker-in-docker) — see [Rootless Docker](#rootless-docker) below.
 - **[T3 Code](https://github.com/pingdotgg/t3code)** (`t3`) — a browser GUI that drives the coding
   agents (OpenCode, Claude, Codex). Serves a web UI on port `3773`; `t3 serve` runs it headless
@@ -92,7 +92,7 @@ JavaScript/TypeScript image with multiple runtimes.
 
 Go-focused image.
 
-- **Go 1.26.5** (installed to `/usr/local/go`; `GOROOT`/`GOPATH`/PATH set for login shells).
+- **Go 1.27.1** (installed to `/usr/local/go`; `GOROOT`/`GOPATH`/PATH set for login shells).
 - **Node.js 24** with `npm` (for the shared AI CLIs).
 
 ### `dockette/coder:python`
