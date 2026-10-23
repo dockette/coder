@@ -17,3 +17,5 @@ Coder Docker images (fx, php, nodejs, golang, python).
 - Keep Dockerfile comments very short and simple.
 - No unparenthesized `|| true` in RUN chains — it can silently skip the rest of the build.
 - Smoke tests live in the Makefile (`make test DOCKER_VARIANT=<variant>`).
+- `VERSION` holds the release date, `YYYY.MM.DD` (`.N` for a same-day re-release). `make release` bumps it. CI
+  tags images `<tag>-<VERSION>` (and `latest` as `<VERSION>`) and creates the GitHub release. See README → *Versions*.

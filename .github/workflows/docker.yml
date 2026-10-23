@@ -23,6 +23,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
 
+      - name: Read VERSION
+        id: version
+        run: |
+          v="$(cat VERSION)"
+          grep -Eqx '[0-9]{4}\.[0-9]{2}\.[0-9]{2}(\.[0-9]+)?' <<<"$v" || { echo "::error file=VERSION::expected YYYY.MM.DD or YYYY.MM.DD.N, got '$v'"; exit 1; }
+          echo "version=$v" >> "$GITHUB_OUTPUT"
+
       # Builds into the local Docker daemon, so no export or import step
       - name: Build image
         run: make build DOCKER_VARIANT=${{ matrix.image }}
@@ -39,7 +46,34 @@ jobs:
 
       - name: Push image
         if: ${{ github.ref == 'refs/heads/master' }}
-        run: make push DOCKER_VARIANT=${{ matrix.image }}
+        run: |
+          make push DOCKER_VARIANT=${{ matrix.image }}
+          docker tag dockette/coder:${{ matrix.image }} dockette/coder:${{ matrix.image }}-${{ steps.version.outputs.version }}
+          docker push dockette/coder:${{ matrix.image }}-${{ steps.version.outputs.version }}
+
+  # Tags the commit and publishes a GitHub release for VERSION the first
+  # time it reaches master with the images pushed (make release bumps it).
+  release:
+    name: "Release"
+    needs: build
+    if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Create release if VERSION is new
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          v="$(cat VERSION)"
+          if gh release view "$v" >/dev/null 2>&1; then
+            echo "Release $v already exists"
+            exit 0
+          fi
+          gh release create "$v" --target "$GITHUB_SHA" --title "$v" --generate-notes
 
   docs:
     name: "Docs"

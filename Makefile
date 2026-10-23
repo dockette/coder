@@ -2,12 +2,13 @@ DOCKER_IMAGE=dockette/coder
 DOCKER_VARIANT?=fx
 DOCKER_TAG?=$(DOCKER_VARIANT)
 DOCKER_PLATFORMS?=linux/amd64
+VERSION:=$(shell cat VERSION)
 
 TEST_RUN=docker run --rm --platform ${DOCKER_PLATFORMS} ${DOCKER_IMAGE}:${DOCKER_TAG}
 
 .PHONY: build
 build:
-	docker buildx build --platform ${DOCKER_PLATFORMS} -t ${DOCKER_IMAGE}:${DOCKER_TAG} ${DOCKER_VARIANT}/
+	docker buildx build --platform ${DOCKER_PLATFORMS} --label org.opencontainers.image.version=${VERSION} -t ${DOCKER_IMAGE}:${DOCKER_TAG} ${DOCKER_VARIANT}/
 
 .PHONY: build-all
 build-all:
@@ -110,3 +111,18 @@ _testcase-common:
 	$(TEST_RUN) codex --version
 	$(TEST_RUN) copilot --version
 	$(TEST_RUN) pi --version
+
+.PHONY: version
+version:
+	@echo ${VERSION}
+
+# Sets VERSION to today's date (UTC), YYYY.MM.DD, or YYYY.MM.DD.N when that
+# date is already released (tagged). Commit and push to master to publish.
+.PHONY: release
+release:
+	@git fetch -q --tags origin 2>/dev/null || true; \
+	v=$$(date -u +%Y.%m.%d); n=0; \
+	while git rev-parse -q --verify "refs/tags/$$v" >/dev/null; do n=$$((n+1)); v=$$(date -u +%Y.%m.%d).$$n; done; \
+	echo "$$v" > VERSION; \
+	echo "VERSION: ${VERSION} -> $$v"; \
+	echo "next: git commit -am 'Release: $$v' && git push"

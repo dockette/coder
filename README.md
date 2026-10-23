@@ -135,6 +135,14 @@ run the workspace container with `privileged = true` (or the equivalent `--usern
 Both variables are defaults. If `DOCKER_HOST` is already set, the profile and the script keep that
 value. The script starts no daemon if one answers there.
 
+## Versions
+
+Releases are dated: `YYYY.MM.DD`, or `YYYY.MM.DD.N` for another release on the same day. The current version is in
+[`VERSION`](VERSION). CI tags each build with it, `latest` as `<VERSION>` and other tags as `<tag>-<VERSION>` (for
+example `php-2026.10.23`), sets the `org.opencontainers.image.version` label and creates the GitHub release.
+
+To release: `make release` sets `VERSION` to today's date (UTC), then commit and push to `master`.
+
 ## Development
 
 Images are built and tested per template with the provided `Makefile`. `DOCKER_VARIANT` selects the
@@ -149,6 +157,10 @@ make run   DOCKER_VARIANT=nodejs
 # Build and test every template
 make build-all
 make test-all
+
+# Show or bump the release version
+make version
+make release
 ```
 
 Each template is smoke-tested in CI (build, then version checks for its runtimes and the shared
